@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+
+  messages Message[] //messages sent by this user
+  chats    ChatParticipant[]
+}
+
+//for oAuth(google and githubs),but we still need this table even we works in magic link
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  User User @relation(fields: [userId], references: [id])
+
+  @@unique([provider, providerAccountId])
+}
+
+// Tracks active login sessions
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique //store in cookie
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+//when user requests link, this is created and deleted after click
+model VerificationToken {
+  identifier String //user's email
+  token      String   @unique //random token emailed
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Chat Models
+model Chat {
+  id           String            @id @default(cuid())
+  createdAt    DateTime          @default(now())
+  participants ChatParticipant[]
+  messages     Message[]
+}
+
+model ChatParticipant {
+  id     String @id @default(cuid())
+  chat   Chat   @relation(fields: [chatId], references: [id])
+  chatId String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  joinedAt DateTime @default(now())
+
+  // for group chats,roles ,lastRead...
+  @@unique([chatId, userId])
+}
+
+model Message {
+  id       String @id @default(cuid())
+  content  String
+  sender   User   @relation(fields: [senderId], references: [id])
+  senderId String
+  chat     Chat   @relation(fields: [chatId], references: [id])
+  chatId   String
+
+  createdAt DateTime @default(now())
+  // read receipts,edited flag,...
+}
