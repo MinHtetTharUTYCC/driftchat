@@ -12,18 +12,18 @@ export default {
             colors: {
                 light: {
                     background: "#f9fafb",
+                    moreBackground: "#EEEEEE",
                     text: "#111827",
                     primary: "#008080",
                     morePrimary: "#006666",
                 },
                 dark: {
-                    background: "#111827",
+                    background: "#191818",
+                    moreBackground: "#0f0e0e",
                     text: "#f9fafb",
                     primary: "#66b2b2",
                     morePrimary: "#008080",
                 },
-                // background: "hsl(var(--background))",
-                // foreground: "hsl(var(--foreground))",
                 card: {
                     DEFAULT: "hsl(var(--card))",
                     foreground: "hsl(var(--card-foreground))",

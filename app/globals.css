@@ -2,10 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* :root {
+:root {
     --background: #ffffff;
     --foreground: #171717;
-} */
+}
 
 /* @media (prefers-color-scheme: dark) { */
 
@@ -34,4 +34,8 @@ body {
 
 .dark body {
     @apply bg-dark-background text-dark-text;
+}
+
+.shadow-bottom-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }

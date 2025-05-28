@@ -2,12 +2,9 @@ import React from "react";
 import { redirect } from "next/navigation";
 import { getNextAuthSession } from "@/lib/nextauthSession/session";
 import { prisma } from "@/lib/db/prismaDB";
-import { MessageSquare, MessageSquareOff } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import NoChats from "./components/NoChats";
-import MobileHeader from "../components/MobileHeader";
 import Sidebar from "../components/Sidebar";
 import ChatWindow from "./components/ChatWindow";
+import { RefreshCw } from "lucide-react";
 
 async function ChatPage() {
     const session = await getNextAuthSession();
@@ -37,12 +34,21 @@ async function ChatPage() {
                 take: 1,
             },
         },
+        orderBy: { createdAt: "desc" },
+        take: 1,
     });
 
+    if (chats && chats.length > 0) {
+        redirect(`/chats/c/${chats[0].id}`);
+    } else {
+        redirect("/chats/fresh-new");
+    }
     return (
-        <div className="flex h-full">
-            <Sidebar />
-            <ChatWindow />
+        <div className="flex h-full items-center justify-center">
+            <RefreshCw className="animate-spin h-10 w-10" />
+
+            {/* <Sidebar />
+            <ChatWindow /> */}
         </div>
     );
 }
