@@ -1,5 +1,5 @@
 import React from "react";
-import Message from "./Message";
+import EachMessage from "./EachMessage";
 
 const mockMessages = [
     {
@@ -20,19 +20,7 @@ function MessageList() {
     return (
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {mockMessages.map((message) => (
-                <Message key={message.id} message={message} />
-            ))}
-            {mockMessages.map((message) => (
-                <Message key={message.id} message={message} />
-            ))}
-            {mockMessages.map((message) => (
-                <Message key={message.id} message={message} />
-            ))}
-            {mockMessages.map((message) => (
-                <Message key={message.id} message={message} />
-            ))}
-            {mockMessages.map((message) => (
-                <Message key={message.id} message={message} />
+                <EachMessage key={message.id} message={message} />
             ))}
         </div>
     );

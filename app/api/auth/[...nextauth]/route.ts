@@ -19,6 +19,12 @@ export const authOptions: AuthOptions = {
         }),
     ],
     callbacks: {
+        // async jwt({ token, user }) {
+        //     if (user) {
+        //         token.id = user.id; // Store user ID in the JWT
+        //     }
+        //     return token;
+        // },
         async session({ session, user }) {
             if (session.user) {
                 session.user.id = user.id;

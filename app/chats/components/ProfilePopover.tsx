@@ -87,7 +87,7 @@ export default function ProfilePopover({ userId, name }: { userId: string; name?
                         <div className="flex items-center justify-center p-2 rounded-full bg-gray-300 dark:bg-gray-600">
                             <User className="h-8 w-8 text-gray-600 dark:text-gray-300" />
                         </div>
-                        <h1 className="text-lg font-bold">{name}</h1>
+                        <h1 className="text-lg font-bold">{name ?? "Unknown User"}</h1>
                     </Link>
                     <div
                         className="flex items-center justify-between px-2 py-1 gap-2 rounded-lg hover:bg-stone-100 dark:hover:bg-zinc-700 w-full cursor-pointer"

@@ -21,19 +21,19 @@ async function ChatPage() {
                 },
             },
         },
-        include: {
-            participants: {
-                include: {
-                    user: true,
-                },
-            },
-            messages: {
-                orderBy: {
-                    createdAt: "desc",
-                },
-                take: 1,
-            },
-        },
+        // include: {
+        //     participants: {
+        //         include: {
+        //             user: true,
+        //         },
+        //     },
+        //     messages: {
+        //         orderBy: {
+        //             createdAt: "desc",
+        //         },
+        //         take: 1,
+        //     },
+        // },
         orderBy: { createdAt: "desc" },
         take: 1,
     });
@@ -43,14 +43,14 @@ async function ChatPage() {
     } else {
         redirect("/chats/fresh-new");
     }
-    return (
-        <div className="flex h-full items-center justify-center">
-            <RefreshCw className="animate-spin h-10 w-10" />
+    // return (
+    //     <div className="flex h-full items-center justify-center">
+    //         <RefreshCw className="animate-spin h-10 w-10" />
 
-            {/* <Sidebar />
-            <ChatWindow /> */}
-        </div>
-    );
+    //         {/* <Sidebar />
+    //         <ChatWindow /> */}
+    //     </div>
+    // );
 }
 
 export default ChatPage;

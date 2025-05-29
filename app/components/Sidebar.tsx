@@ -1,20 +1,31 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import NewChatButton from "../chats/components/NewChatButton";
 import ConversationList from "../chats/components/ConversationList";
 import SearchList from "../chats/components/SearchList";
 import SearchBox from "../chats/components/SearchBox";
-import { Chat } from "@prisma/client";
 
-function Sidebar({ chats }: { chats: Chat[] }) {
+import { ExtendedChat } from "@/types";
+
+function Sidebar({
+    onNewChat,
+    onDesktopFocus,
+    isMobile,
+    chats,
+    onChatClick,
+}: {
+    onNewChat: () => void;
+    onDesktopFocus: () => void;
+    isMobile: boolean;
+    chats: ExtendedChat[];
+    onChatClick: (chatId: string) => void;
+}) {
     const [isSearching, setIsSearching] = useState(false);
     const [query, setQuery] = useState("");
-
     const onQueryChange = (q: string) => {
         setQuery(q);
         console.log("....", q);
     };
-
     const onSearchActive = () => {
         setIsSearching(true);
     };
@@ -23,23 +34,23 @@ function Sidebar({ chats }: { chats: Chat[] }) {
         setQuery("");
     };
 
-    useEffect(() => {
-        if (query === "") {
-            console.log("RESETED.");
-        }
-    }, [query]);
-
     return (
-        <div
-            className={`w-[300px] hidden md:flex flex-col border-r border-gray-200 dark:border-gray-600`}
-        >
-            <NewChatButton />
+        <div className={`h-full flex flex-col border-r border-gray-200 dark:border-gray-600`}>
+            <NewChatButton
+                onNewChat={onNewChat}
+                onDesktopFocus={onDesktopFocus}
+                isMobile={isMobile}
+            />
             <SearchBox
                 onActive={onSearchActive}
                 onCancel={onSearchCancel}
                 onQueryChange={onQueryChange}
             />
-            {isSearching ? <SearchList query={query} /> : <ConversationList />}
+            {isSearching ? (
+                <SearchList query={query} />
+            ) : (
+                <ConversationList chats={chats} onChatClick={onChatClick} />
+            )}
         </div>
     );
 }

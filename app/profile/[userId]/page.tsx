@@ -41,7 +41,7 @@ async function ProfilePage({ params }: { params: { userId: string } }) {
                         <User className="h-16 w-16 text-gray-600 dark:text-gray-300" />
                     </div>
                     <div className="flex-1">
-                        <h1 className="text-xl font-bold">{user.name}</h1>
+                        <h1 className="text-xl font-bold">{user.name ?? "Unknown User"}</h1>
                         <p className="text-md text-gray-600 dark:text-gray-400">{user.email}</p>
                     </div>
                 </div>

@@ -1,13 +1,19 @@
+"use client";
 import Sidebar from "@/app/components/Sidebar";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ChatWindow from "../../components/ChatWindow";
-import { Chat } from "@prisma/client";
+import { ExtendedChat } from "@/types";
+import { redirect, useParams } from "next/navigation";
 
-function ChatPage({ params }: { params: { id: string } }) {
-    const { id } = params;
+function ChatPage() {
+    const params = useParams();
+    const id = params.id as string;
 
-    const [chats, setChats] = useState<Chat[]>([]);
-    const [currentChat, setCurrentChat] = useState<Chat | null>(null);
+    const [chats, setChats] = useState<ExtendedChat[]>([]);
+    const [currentChat, setCurrentChat] = useState<ExtendedChat | null>(null);
+
+    const [isMobile, setIsMobile] = useState(false);
+    const [showChatWindow, setShowChatWindow] = useState(false);
 
     useEffect(() => {
         const fetchChats = async () => {
@@ -32,12 +38,73 @@ function ChatPage({ params }: { params: { id: string } }) {
 
         fetchChats();
         fetchChat();
+    }, [id]);
+
+    //for not mobile
+    const chatWindowSearchInputRef = useRef<{ focusInput: () => void }>(null);
+    const handleChatWidowSearchFocus = () => {
+        chatWindowSearchInputRef.current?.focusInput();
+    };
+
+    useEffect(() => {
+        const checkIsMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        checkIsMobile();
+
+        window.addEventListener("resize", checkIsMobile);
+        //clearn up listerner
+        return () => window.removeEventListener("resize", checkIsMobile);
     }, []);
 
-    <div className="flex h-full">
-        <Sidebar chats={chats} />
-        <ChatWindow chat={currentChat} />
-    </div>;
+    const goToNewChat = () => {
+        setShowChatWindow(true);
+    };
+
+    const backToSidebar = () => {
+        setShowChatWindow(false);
+    };
+
+    const onChatClick = (chatId: string) => {
+        setShowChatWindow(true);
+        redirect(`/chats/c/${chatId}`);
+    };
+
+    // return (
+    //     <div className="flex h-full">
+    //         <Sidebar chats={chats} />
+    //         <ChatWindow chat={currentChat} />
+    //     </div>
+    // );
+    return (
+        <div className="flex h-full">
+            {/* Sidebar - hidden on mobile when chat window is shown */}
+            {(!isMobile || !showChatWindow) && (
+                <div className={isMobile ? "w-full" : "w-[300px]"}>
+                    <Sidebar
+                        onNewChat={goToNewChat}
+                        onDesktopFocus={handleChatWidowSearchFocus}
+                        isMobile={isMobile}
+                        chats={chats}
+                        onChatClick={onChatClick}
+                    />
+                </div>
+            )}
+
+            {/* Chat Window - hidden on mobile when sidebar is shown */}
+            {(!isMobile || showChatWindow) && (
+                <div className={isMobile ? "w-full" : "flex-1"}>
+                    <ChatWindow
+                        // ref={chatWindowSearchInputRef}
+                        onBackToSidebar={backToSidebar}
+                        isMobile={isMobile}
+                        currentChat={currentChat}
+                    />
+                </div>
+            )}
+        </div>
+    );
 }
 
 export default ChatPage;

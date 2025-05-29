@@ -84,7 +84,7 @@ const StarterChatWindow = forwardRef<StarterChatWindowHandle, StarterChatWindowP
                             setQuery(e.target.value);
                         }}
                         onFocus={() => setIsOpen(true)}
-                        onBlur={() => setIsOpen(false)}
+                        onBlur={() => setTimeout(() => setIsOpen(false), 200)}
                     />
                 </div>
                 {isOpen && (

@@ -10,9 +10,9 @@ export async function GET(req: NextRequest, { params }: { params: { chatId: stri
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { chatId } = params;
-
     try {
+        const { chatId } = await params;
+
         const chat = await prisma.chat.findUnique({
             where: {
                 id: chatId,

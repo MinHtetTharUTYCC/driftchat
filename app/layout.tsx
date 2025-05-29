@@ -6,6 +6,9 @@ import { getNextAuthSession } from "@/lib/nextauthSession/session";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prismaDB";
 import { ThemeProvider } from "next-themes";
+import AuthInitializer from "@/components/AuthInitializer";
+import { SessionProvider } from "next-auth/react";
+import { Providers } from "./providers";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -28,28 +31,36 @@ export default async function RootLayout({
     children: React.ReactNode;
 }>) {
     const session = await getNextAuthSession();
-    if (!session) {
+    if (!session?.user?.id) {
         redirect("/api/auth/signin");
     }
-    const { id } = session.user;
+    const userId = session.user.id as string;
 
-    const user = await prisma.user.findUnique({
-        where: { id },
-    });
-    if (!user) redirect("/api/auth/signin");
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+        });
+        if (!user) redirect("/api/auth/signin");
 
-    return (
-        <html lang="en" className="h-full" suppressHydrationWarning>
-            <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased h-full bg-light-background dark:bg-dark-background`}
-            >
-                <ThemeProvider attribute={"class"} enableSystem defaultTheme="system">
-                    <div className="flex flex-col h-full">
-                        <MainHeader userId={id} name={user.name} />
-                        <div className="flex-1 px-2 md:px-6 min-h-0">{children}</div>
-                    </div>
-                </ThemeProvider>
-            </body>
-        </html>
-    );
+        return (
+            <html lang="en" className="h-full" suppressHydrationWarning>
+                <body
+                    className={`${geistSans.variable} ${geistMono.variable} antialiased h-full bg-light-background dark:bg-dark-background`}
+                >
+                    <Providers>
+                        <ThemeProvider attribute={"class"} enableSystem defaultTheme="system">
+                            <AuthInitializer />
+                            <div className="flex flex-col h-full">
+                                <MainHeader userId={userId} name={user.name} />
+                                <div className="flex-1 px-2 md:px-6 min-h-0">{children}</div>
+                            </div>
+                        </ThemeProvider>
+                    </Providers>
+                </body>
+            </html>
+        );
+    } catch (error) {
+        console.error("Failed to fetch user:", error);
+        redirect("/api/auth/signin");
+    }
 }
