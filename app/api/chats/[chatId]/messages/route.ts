@@ -5,11 +5,11 @@ import { prisma } from "@/lib/db/prismaDB";
 import { getNextAuthSession } from "@/lib/nextauthSession/session";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest, { params }: { params: { chatId: string } }) {
+export async function GET(req: NextRequest, context: { params: { chatId: string } }) {
     const session = await getNextAuthSession();
     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const { chatId } = params;
+    const { chatId } = context.params;
 
     const messages = await prisma.message.findMany({
         where: { chatId: chatId },
@@ -20,22 +20,35 @@ export async function GET(req: NextRequest, { params }: { params: { chatId: stri
     return NextResponse.json({ messages });
 }
 
-export async function POST(req: NextRequest, { params }: { params: { chatId: string } }) {
+export async function POST(req: NextRequest, context: { params: { chatId: string } }) {
     const session = await getNextAuthSession();
     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const { chatId } = params;
+    const { chatId } = context.params;
     const { content } = await req.json();
 
-    if (!content) return NextResponse.json({ error: "Message content required" }, { status: 400 });
+    if (!content || typeof content !== "string")
+        return NextResponse.json({ error: "Message content required" }, { status: 400 });
 
-    const message = await prisma.message.create({
-        data: {
-            content,
+    // Ensure user is participant of the chata
+    const isParticipant = await prisma.chatParticipant.findFirst({
+        where: {
             chatId,
-            senderId: session.user.id,
+            userId: session.user.id,
         },
     });
 
-    return NextResponse.json({ message });
+    if (!isParticipant) {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const newMessage = await prisma.message.create({
+        data: {
+            chatId,
+            senderId: session?.user.id,
+            content,
+        },
+    });
+
+    return NextResponse.json({ newMessage });
 }

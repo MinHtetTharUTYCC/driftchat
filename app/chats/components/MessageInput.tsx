@@ -1,6 +1,6 @@
 "use client";
 import { SendHorizonal } from "lucide-react";
-import React, { ReactEventHandler, useState } from "react";
+import React, { useState } from "react";
 
 function MessageInput({ onMsgSend }: { onMsgSend: (msg: string) => void }) {
     const [msg, setMsg] = useState("");
@@ -8,6 +8,7 @@ function MessageInput({ onMsgSend }: { onMsgSend: (msg: string) => void }) {
     const onSend = () => {
         if (msg.trim()) {
             onMsgSend(msg.trim());
+            setMsg("");
         }
     };
 
