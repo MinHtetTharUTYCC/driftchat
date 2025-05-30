@@ -7,8 +7,8 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prismaDB";
 import { ThemeProvider } from "next-themes";
 import AuthInitializer from "@/components/AuthInitializer";
-import { SessionProvider } from "next-auth/react";
 import { Providers } from "./providers";
+import ClientLayout from "./ClientLayout";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -50,10 +50,9 @@ export default async function RootLayout({
                     <Providers>
                         <ThemeProvider attribute={"class"} enableSystem defaultTheme="system">
                             <AuthInitializer />
-                            <div className="flex flex-col h-full">
-                                <MainHeader userId={userId} name={user.name} />
-                                <div className="flex-1 px-2 md:px-6 min-h-0">{children}</div>
-                            </div>
+                            <ClientLayout userId={userId} name={user.name}>
+                                {children}
+                            </ClientLayout>
                         </ThemeProvider>
                     </Providers>
                 </body>

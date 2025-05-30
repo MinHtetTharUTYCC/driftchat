@@ -1,10 +1,10 @@
 "use client";
-import { ExtendedChat } from "@/types";
+import { ChatWithLatestMessage, ExtendedChat } from "@/types";
 import { MoreHorizontal, User } from "lucide-react";
 import React, { useState } from "react";
 
 type ConversationProps = {
-    conversation: ExtendedChat;
+    conversation: ChatWithLatestMessage;
     currentUserId?: string | null;
     onChatClick: (chatId: string) => void;
 };
@@ -31,9 +31,7 @@ function Conversation({ conversation, currentUserId, onChatClick }: Conversation
                 <div className="flex-1 overflow-hidden">
                     <p className="font-semibold">{otherParticipantUser?.name || "Unknown User"}</p>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {conversation.messages &&
-                            conversation.messages.length > 0 &&
-                            conversation.messages[0].content}
+                        {conversation.latestMessage && conversation.latestMessage.content}
                     </p>
                 </div>
             ) : (

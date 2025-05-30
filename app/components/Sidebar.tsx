@@ -1,30 +1,31 @@
 "use client";
 import React, { useState } from "react";
 import NewChatButton from "../chats/components/NewChatButton";
-import ConversationList from "../chats/components/ConversationList";
 import SearchList from "../chats/components/SearchList";
 import SearchBox from "../chats/components/SearchBox";
 
-import { ExtendedChat } from "@/types";
+import { ChatWithLatestMessage, ExtendedChat } from "@/types";
+import Conversation from "../chats/components/Conversation";
+import { useAuthStore } from "@/lib/store/useAuthStore";
 
 function Sidebar({
     onNewChat,
     onDesktopFocus,
     isMobile,
-    chats,
+    chatsWithLatestMessage,
     onChatClick,
 }: {
     onNewChat: () => void;
     onDesktopFocus: () => void;
     isMobile: boolean;
-    chats: ExtendedChat[];
+    chatsWithLatestMessage: ChatWithLatestMessage[];
     onChatClick: (chatId: string) => void;
 }) {
     const [isSearching, setIsSearching] = useState(false);
     const [query, setQuery] = useState("");
+
     const onQueryChange = (q: string) => {
         setQuery(q);
-        console.log("....", q);
     };
     const onSearchActive = () => {
         setIsSearching(true);
@@ -33,6 +34,8 @@ function Sidebar({
         setIsSearching(false);
         setQuery("");
     };
+
+    const currentUserId = useAuthStore((state) => state.userId);
 
     return (
         <div className={`h-full flex flex-col border-r border-gray-200 dark:border-gray-600`}>
@@ -49,7 +52,16 @@ function Sidebar({
             {isSearching ? (
                 <SearchList query={query} />
             ) : (
-                <ConversationList chats={chats} onChatClick={onChatClick} />
+                <div className="mt-2 flex-1 overflow-y-auto">
+                    {chatsWithLatestMessage.map((conversation) => (
+                        <Conversation
+                            key={conversation.id}
+                            conversation={conversation}
+                            currentUserId={currentUserId}
+                            onChatClick={onChatClick}
+                        />
+                    ))}
+                </div>
             )}
         </div>
     );

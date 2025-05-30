@@ -9,6 +9,13 @@ declare type ExtendedChat = Chat & {
     messages: Message[];
 };
 declare type ConversationListProps = {
-    chats: ExtendedChat[];
+    chatsWithLatestMessage: ChatWithLatestMessage[];
     onChatClick: (chatId: string) => void;
+};
+
+// for sidebar
+declare type ChatWithLatestMessage = Chat & {
+    participants: ExtendedChatParticipant[];
+    messages: Message[];
+    latestMessage?: Message | null;
 };

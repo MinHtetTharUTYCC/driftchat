@@ -37,7 +37,12 @@ export async function GET(req: NextRequest) {
             orderBy: { createdAt: "desc" },
         });
 
-        return NextResponse.json({ chats });
+        const chatsWithLatestMessage = chats.map((chat) => ({
+            ...chat,
+            latestMessage: chat.messages[0],
+        }));
+
+        return NextResponse.json({ chatsWithLatestMessage });
     } catch (error) {
         console.error("Error fetching chats: ", error);
         return NextResponse.json({ error: "Failed to fetch chats" }, { status: 500 });

@@ -1,13 +1,12 @@
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import React from "react";
-import { ChevronDown, ChevronRight, LogOut, Moon, User } from "lucide-react";
+import { ChevronDown, User } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { PopoverContent } from "@radix-ui/react-popover";
 import ProfilePopover from "../chats/components/ProfilePopover";
 
-async function MainHeader({ userId, name }: { userId: string; name?: string | null }) {
+function MainHeader({ userId, name }: { userId: string; name?: string | null }) {
     return (
         <div className="h-30 flex items-center justify-between px-4 py-2 shadow-lg bg-light-moreBackground dark:bg-dark-background z-50">
             <h1 className="text-2xl font-bold">DriftChat</h1>

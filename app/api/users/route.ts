@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
     const session = await getServerSession(authOptions);
 
     const allUsers = await prisma.user.findMany({
-        // where: { NOT: { id: session?.user?.id } },
+        where: { NOT: { id: session?.user?.id } },
     });
 
     return NextResponse.json({ allUsers });
