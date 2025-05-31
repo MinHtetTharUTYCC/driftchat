@@ -28,7 +28,7 @@ function SearchBox({
     };
 
     return (
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 mx-2">
             {isFocused && (
                 <div
                     className="p-2 flex items-center justify-center rounded-full hover:bg-gray-200 dark:hover:bg-zinc-600"
@@ -46,7 +46,7 @@ function SearchBox({
                 </div>
             )}
             <form
-                className="w-full mr-2 p-1 flex items-center justify-between rounded-full
+                className="w-full p-1 flex items-center justify-between rounded-full
                  bg-gray-200 dark:bg-zinc-700  hover:bg-transparent dark:hover:bg-transparent 
                  border border-transparent hover:border-gray-400 dark:hover:border-gray-600 max-w-md"
                 onSubmit={(e) => {

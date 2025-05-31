@@ -3,7 +3,7 @@ import { User as PrismaUser } from "@prisma/client";
 import { User } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-function SearchUserItem({ user }: { user: PrismaUser }) {
+function SearchUserItem({ user, onShowChat }: { user: PrismaUser; onShowChat: () => void }) {
     const router = useRouter();
 
     const handleCheck = async () => {
@@ -26,10 +26,12 @@ function SearchUserItem({ user }: { user: PrismaUser }) {
                 });
 
                 const newChat = await createResponse.json();
-                router.push(`/chats/c/${newChat.id}`);
+                router.push(`/chats?chatId=${newChat.id}`);
+                onShowChat();
             } else {
                 //Navigate to existing chat
-                router.push(`/chats/c/${chatId}`);
+                router.push(`/chats?chatId=${chatId}`);
+                onShowChat();
             }
         } catch (error) {
             console.error("Error checking chat", error);

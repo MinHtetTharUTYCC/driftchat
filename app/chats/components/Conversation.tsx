@@ -1,5 +1,5 @@
 "use client";
-import { ChatWithLatestMessage, ExtendedChat } from "@/types";
+import { ChatWithLatestMessage } from "@/types";
 import { MoreHorizontal, User } from "lucide-react";
 import React, { useState } from "react";
 
@@ -7,9 +7,10 @@ type ConversationProps = {
     conversation: ChatWithLatestMessage;
     currentUserId?: string | null;
     onChatClick: (chatId: string) => void;
+    isActive: boolean;
 };
 
-function Conversation({ conversation, currentUserId, onChatClick }: ConversationProps) {
+function Conversation({ conversation, currentUserId, onChatClick, isActive }: ConversationProps) {
     const [isChildHovered, setIsChildHovered] = useState(false);
 
     const otherParticipantUser = conversation.participants.find(
@@ -19,8 +20,8 @@ function Conversation({ conversation, currentUserId, onChatClick }: Conversation
     return (
         <div
             className={`group/parent flex items-center gap-2 p-2 rounded-l-lg cursor-pointer ${
-                isChildHovered ? "bg-transparent" : "hover:bg-gray-200 dark:hover:bg-zinc-700"
-            }`}
+                isActive && "bg-slate-200 dark:bg-slate-700"
+            }  ${isChildHovered ? "bg-transparent" : "hover:bg-gray-200 dark:hover:bg-zinc-700"}`}
             onClick={() => onChatClick(conversation.id)}
         >
             <div className="flex items-center justify-center p-2 rounded-full bg-gray-300 dark:bg-gray-600">
@@ -31,6 +32,7 @@ function Conversation({ conversation, currentUserId, onChatClick }: Conversation
                 <div className="flex-1 overflow-hidden">
                     <p className="font-semibold">{otherParticipantUser?.name || "Unknown User"}</p>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
+                        {currentUserId === conversation.latestMessage?.senderId && "You: "}
                         {conversation.latestMessage && conversation.latestMessage.content}
                     </p>
                 </div>

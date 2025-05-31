@@ -4,7 +4,7 @@ import SearchUserItem from "./SearchUserItem";
 import { User } from "@prisma/client";
 import { RefreshCw, Search } from "lucide-react";
 
-function SearchList({ query }: { query: string }) {
+function SearchList({ query, onShowChat }: { query: string; onShowChat: () => void }) {
     const [allUsers, setAllUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(false);
     const [isMessageSearch, setIsMessageSearch] = useState(false);
@@ -76,7 +76,7 @@ function SearchList({ query }: { query: string }) {
                     ) : (
                         <>
                             {filteredUsers.map((user) => (
-                                <SearchUserItem key={user.id} user={user} />
+                                <SearchUserItem key={user.id} user={user} onShowChat={onShowChat} />
                             ))}
                         </>
                     )}

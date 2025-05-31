@@ -3,7 +3,7 @@ import Sidebar from "@/app/components/Sidebar";
 import React, { useEffect, useRef, useState } from "react";
 import ChatWindow from "../../components/ChatWindow";
 import { ChatWithLatestMessage, ExtendedChat } from "@/types";
-import { redirect, useParams } from "next/navigation";
+import { redirect, useParams, useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/lib/store/useAuthStore";
 import { initSocket } from "@/lib/socket-io/socket";
 import { Message } from "@prisma/client";
@@ -12,8 +12,10 @@ import { Socket } from "socket.io-client";
 function ChatPage() {
     const socketRef = useRef<Socket | null>(null);
 
-    const params = useParams();
-    const id = params.id as string;
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
+    const chatId = searchParams.get("chatId");
 
     const [chatsWithLatestMessage, setChatsWithLatestMessage] = useState<ChatWithLatestMessage[]>(
         []
@@ -38,8 +40,17 @@ function ChatPage() {
             setChatsWithLatestMessage(data.chatsWithLatestMessage);
         };
 
+        fetchChats();
+    }, []);
+    useEffect(() => {
+        if (!chatId) {
+            setCurrentChat(null);
+            setCurrentChatMessages([]);
+            return;
+        }
+
         const fetchChat = async () => {
-            const res = await fetch(`/api/chats/${id}`);
+            const res = await fetch(`/api/chats/${chatId}`);
             if (!res.ok) {
                 throw new Error("Error getting single chat");
             }
@@ -48,9 +59,8 @@ function ChatPage() {
             setCurrentChat(data.chat);
         };
 
-        fetchChats();
         fetchChat();
-    }, [id]);
+    }, [chatId]);
 
     //for not mobile
     const chatWindowSearchInputRef = useRef<{ focusInput: () => void }>(null);
@@ -75,14 +85,15 @@ function ChatPage() {
     }, [isMobile, showChatWindow]);
 
     const goToNewChat = () => {
+        // TODO: new Chat query
         setShowChatWindow(true);
     };
     const backToSidebar = () => {
         setShowChatWindow(false);
     };
-    const onChatClick = (chatId: string) => {
+    const onChatClick = (selectedChatId: string) => {
+        router.push(`/chats?chatId=${selectedChatId}`, { scroll: false });
         setShowChatWindow(true);
-        redirect(`/chats/c/${chatId}`);
     };
 
     // Socket set up and message listening
@@ -149,6 +160,13 @@ function ChatPage() {
         }
     }, [currentChat]);
 
+    // Show chat window automatically if chatId is present
+    useEffect(() => {
+        if (chatId && isMobile) {
+            setShowChatWindow(true);
+        }
+    }, [chatId, isMobile]);
+
     return (
         <div className="flex h-full">
             {/* Sidebar - hidden on mobile when chat window is shown */}
@@ -160,6 +178,8 @@ function ChatPage() {
                         isMobile={isMobile}
                         chatsWithLatestMessage={chatsWithLatestMessage}
                         onChatClick={onChatClick}
+                        currentChatId={chatId}
+                        isLoading={false}
                     />
                 </div>
             )}
@@ -173,6 +193,7 @@ function ChatPage() {
                         isMobile={isMobile}
                         currentChat={currentChat}
                         messages={currentChatMessages}
+                        isLoading={false}
                     />
                 </div>
             )}

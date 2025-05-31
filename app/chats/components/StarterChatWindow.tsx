@@ -14,6 +14,7 @@ import { ArrowLeft } from "lucide-react";
 interface StarterChatWindowProps {
     onBackToSidebar: () => void;
     isMobile: boolean;
+    onShowChat: () => void;
 }
 
 interface StarterChatWindowHandle {
@@ -21,7 +22,7 @@ interface StarterChatWindowHandle {
 }
 
 const StarterChatWindow = forwardRef<StarterChatWindowHandle, StarterChatWindowProps>(
-    ({ onBackToSidebar, isMobile }, ref) => {
+    ({ onBackToSidebar, isMobile, onShowChat }, ref) => {
         const [allUsers, setAllUsers] = useState<User[]>([]);
         const [query, setQuery] = useState("");
         const [isOpen, setIsOpen] = useState(false);
@@ -88,11 +89,11 @@ const StarterChatWindow = forwardRef<StarterChatWindowHandle, StarterChatWindowP
                     />
                 </div>
                 {isOpen && (
-                    <div className="absolute inset-0 mt-10 ml-4 p-2 space-y-1 w-[300px] max-h-[300px] bg-white dark:bg-zinc-800 overflow-y-auto rounded-lg shadow-md">
+                    <div className="absolute inset-0 mt-16 md:mt-12 ml-4 p-2 space-y-1 w-[300px] max-h-[300px] bg-white dark:bg-zinc-800 overflow-y-auto rounded-lg shadow-md">
                         {!query.trim() && <p className="font-semibold my-2">All Users</p>}
                         {filteredUsers.length > 0 ? (
                             filteredUsers.map((user) => (
-                                <SearchUserItem key={user.id} user={user} />
+                                <SearchUserItem key={user.id} user={user} onShowChat={onShowChat} />
                             ))
                         ) : (
                             <p className="mt-4 text-sm text-center text-gray-500">No users found</p>
