@@ -24,6 +24,9 @@ model User {
 
   messages Message[] //messages sent by this user
   chats    ChatParticipant[]
+
+  lastSeen DateTime?
+  isOnline Boolean   @default(false)
 }
 
 //for oAuth(google and githubs),but we still need this table even we works in magic link

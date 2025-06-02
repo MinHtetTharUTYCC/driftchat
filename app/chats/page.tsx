@@ -2,13 +2,14 @@
 import Sidebar from "@/app/components/Sidebar";
 import React, { useEffect, useRef, useState } from "react";
 import { ChatWithLatestMessage, ExtendedChat } from "@/types";
-import { redirect, useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/lib/store/useAuthStore";
 import { initSocket } from "@/lib/socket-io/socket";
 import { Message } from "@prisma/client";
 import { Socket } from "socket.io-client";
 import ChatWindow from "./components/ChatWindow";
 import StarterChatWindow from "./components/StarterChatWindow";
+import ChatInfo from "./components/chat-info/ChatInfo";
 
 function ChatPage() {
     const socketRef = useRef<Socket | null>(null);
@@ -31,6 +32,14 @@ function ChatPage() {
 
     const [isMobile, setIsMobile] = useState(false);
     const [showChatWindow, setShowChatWindow] = useState(false);
+
+    const [showChatInfo, setShowChatInfo] = useState(false);
+
+    const loggedInUserId = useAuthStore((state) => state.userId);
+
+    const otherParticipantUser = currentChat?.participants.find(
+        (p) => p.userId !== loggedInUserId
+    )?.user;
 
     const setHideHeader = useAuthStore((state) => state.setHideHeader);
 
@@ -101,8 +110,8 @@ function ChatPage() {
     }, []);
 
     useEffect(() => {
-        setHideHeader(isMobile && showChatWindow);
-    }, [isMobile, showChatWindow]);
+        setHideHeader(isMobile && (showChatWindow || showChatInfo));
+    }, [isMobile, showChatWindow, showChatInfo]);
 
     const goToNewChat = () => {
         // TODO: new Chat query
@@ -122,9 +131,17 @@ function ChatPage() {
         setShowChatWindow(true);
     };
 
+    const onChatInfoBack = () => {
+        setShowChatInfo(false);
+        setShowChatWindow(true);
+    };
+
     // Socket set up and message listening
     useEffect(() => {
-        const socket = initSocket();
+        if (!loggedInUserId) return;
+        console.log("USERID", loggedInUserId);
+
+        const socket = initSocket(loggedInUserId);
         socketRef.current = socket;
 
         const handleReceiveMessage = (newMessage: Message) => {
@@ -155,7 +172,7 @@ function ChatPage() {
         return () => {
             socket.off("receive-message", handleReceiveMessage);
         };
-    }, [currentChat?.id]);
+    }, [loggedInUserId, currentChat?.id]);
 
     // Room management
     useEffect(() => {
@@ -194,9 +211,9 @@ function ChatPage() {
     // }, [chatId, isMobile]);
 
     return (
-        <div className="flex h-full">
-            {/* Sidebar - hidden on mobile when chat window is shown */}
-            {(!isMobile || !showChatWindow) && (
+        <div className="flex h-full bg-gray-100 dark:bg-black">
+            {/* Sidebar - hidden on mobile when chat window  or chat info is shown */}
+            {(!isMobile || (!showChatWindow && !showChatInfo)) && (
                 <div className={isMobile ? "w-full" : "w-[300px]"}>
                     <Sidebar
                         onNewChat={goToNewChat}
@@ -211,9 +228,9 @@ function ChatPage() {
                 </div>
             )}
 
-            {/* Chat Window - hidden on mobile when sidebar is shown */}
-            {(!isMobile || showChatWindow) && (
-                <div className={isMobile ? "w-full" : "flex-1"}>
+            {/* Chat Window - shown on mobile only if showChatWindow is true and chat info is not shown */}
+            {(!isMobile || (showChatWindow && !showChatInfo)) && (
+                <div className={`${isMobile ? "w-full" : "flex-1"}`}>
                     {isNewChat ? (
                         <StarterChatWindow
                             ref={chatWindowSearchInputRef}
@@ -232,8 +249,24 @@ function ChatPage() {
                             currentChat={currentChat}
                             messages={currentChatMessages}
                             isLoading={isLoadingCurrentChat}
+                            onToggleChatInfo={() => {
+                                if (isMobile) {
+                                    setShowChatWindow(false);
+                                }
+                                setShowChatInfo((prev) => !prev);
+                            }}
                         />
                     )}
+                </div>
+            )}
+
+            {showChatInfo && (
+                <div className={`${isMobile ? "w-full" : "w-[400px] "}`}>
+                    <ChatInfo
+                        isMobile={isMobile}
+                        onBack={onChatInfoBack}
+                        chatParticipant={otherParticipantUser}
+                    />
                 </div>
             )}
         </div>

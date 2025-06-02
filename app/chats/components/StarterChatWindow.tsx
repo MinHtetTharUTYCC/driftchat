@@ -9,7 +9,7 @@ import React, {
     useState,
 } from "react";
 import SearchUserItem from "./SearchUserItem";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, MessageSquareDiff } from "lucide-react";
 
 interface StarterChatWindowProps {
     onBackToSidebar: () => void;
@@ -85,7 +85,7 @@ const StarterChatWindow = forwardRef<StarterChatWindowHandle, StarterChatWindowP
                             setQuery(e.target.value);
                         }}
                         onFocus={() => setIsOpen(true)}
-                        onBlur={() => setTimeout(() => setIsOpen(false), 200)}
+                        onBlur={() => setIsOpen(false)}
                     />
                 </div>
                 {isOpen && (
@@ -100,8 +100,10 @@ const StarterChatWindow = forwardRef<StarterChatWindowHandle, StarterChatWindowP
                         )}
                     </div>
                 )}
-                <div className="flex-1 flex items-center justify-center  text-center">
-                    Start a New Chat!
+
+                <div className="flex-1 flex flex-col items-center justify-center  text-center">
+                    <MessageSquareDiff className="h-12 w-12" />
+                    <h1 className="text-xl text-center">Start a New Chat!</h1>
                 </div>
             </div>
         );

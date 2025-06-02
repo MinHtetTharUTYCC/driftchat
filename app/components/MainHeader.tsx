@@ -8,7 +8,7 @@ import ProfilePopover from "../chats/components/ProfilePopover";
 
 function MainHeader({ userId, name }: { userId: string; name?: string | null }) {
     return (
-        <div className="h-30 flex items-center justify-between px-4 py-2 shadow-lg bg-light-moreBackground dark:bg-dark-background z-50">
+        <div className="h-30 flex items-center justify-between px-4 py-2 shadow-lg bg-light-background dark:bg-dark-background z-50">
             <h1 className="text-2xl font-bold">DriftChat</h1>
             <TooltipProvider>
                 <Popover>

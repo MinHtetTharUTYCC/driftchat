@@ -20,7 +20,7 @@ function Conversation({ conversation, currentUserId, onChatClick, isActive }: Co
     return (
         <div
             className={`group/parent flex items-center gap-2 p-2 rounded-l-lg cursor-pointer ${
-                isActive && "bg-slate-200 dark:bg-slate-700"
+                isActive && "bg-slate-100 dark:bg-slate-700"
             }  ${isChildHovered ? "bg-transparent" : "hover:bg-gray-200 dark:hover:bg-zinc-700"}`}
             onClick={() => onChatClick(conversation.id)}
         >

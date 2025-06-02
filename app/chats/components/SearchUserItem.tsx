@@ -43,7 +43,7 @@ function SearchUserItem({ user, onShowChat }: { user: PrismaUser; onShowChat: ()
 
     return (
         <div
-            onClick={handleCheck}
+            onMouseDown={handleCheck}
             className="flex items-center justify-start gap-2 p-2 bg-transparent hover:bg-gray-200 dark:hover:bg-zinc-700 rounded-l-lg cursor-pointer"
         >
             <div className="flex items-center justify-center p-2 rounded-full bg-gray-300 dark:bg-gray-600">

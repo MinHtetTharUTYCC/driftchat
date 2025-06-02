@@ -45,10 +45,11 @@ function SearchBox({
                     <ArrowLeft className="h-6 w-6" />
                 </div>
             )}
+
             <form
-                className="w-full p-1 flex items-center justify-between rounded-full
+                className="flex-1 p-1 flex items-center justify-between rounded-full
                  bg-gray-200 dark:bg-zinc-700  hover:bg-transparent dark:hover:bg-transparent 
-                 border border-transparent hover:border-gray-400 dark:hover:border-gray-600 max-w-md"
+                 border border-transparent hover:border-gray-400 dark:hover:border-gray-600"
                 onSubmit={(e) => {
                     e.preventDefault();
                 }}
@@ -73,7 +74,7 @@ function SearchBox({
 
                 <div
                     className={`flex items-center justify-center bg-gray-200 dark:bg-zinc-600 p-2 rounded-full cursor-pointer  ${
-                        searchRef.current?.value.trim() === "" ? "invisible" : "visible"
+                        query.trim() === "" ? "invisible" : "visible"
                     }`}
                     onClick={onSearchBoxClear}
                 >

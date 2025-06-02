@@ -45,7 +45,9 @@ function Sidebar({
     const currentUserId = useAuthStore((state) => state.userId);
 
     return (
-        <div className={`h-full flex flex-col border-r border-gray-200 dark:border-gray-600`}>
+        <div
+            className={`h-full flex flex-col border-r border-gray-200 dark:border-gray-600 bg-light-background dark:bg-dark-background pl-2`}
+        >
             <NewChatButton
                 onNewChat={onNewChat}
                 onDesktopFocus={onDesktopFocus}

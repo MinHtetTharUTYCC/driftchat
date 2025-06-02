@@ -1,11 +1,16 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
 import { io, Socket } from "socket.io-client";
 
 let socket: Socket;
 
-export const initSocket = () => {
+export const initSocket = (userId: string) => {
     if (!socket) {
         socket = io(process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:5000", {
             transports: ["websocket"],
+            auth: {
+                userId,
+            },
         });
     }
 

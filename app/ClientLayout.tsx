@@ -17,7 +17,7 @@ export default function ClientLayout({
     return (
         <div className="flex flex-col h-full">
             {!hideHeader && <MainHeader userId={userId} name={name} />}
-            <div className="flex-1 md:px-6 min-h-0">{children}</div>
+            <div className="flex-1 min-h-0">{children}</div>
         </div>
     );
 }
