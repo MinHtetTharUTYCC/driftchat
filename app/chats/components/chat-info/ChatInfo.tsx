@@ -65,8 +65,16 @@ function ChatInfo({
                         title="Profile"
                         link={`/profile/${chatParticipant ? chatParticipant.id : "undefined"}`}
                     />
-                    <ChatInfoAction icon={Bell} title="Mute" link={`/profile`} />
-                    <ChatInfoAction icon={Search} title="Search" link={`/profile`} />
+                    <ChatInfoAction
+                        icon={Bell}
+                        title="Mute"
+                        link={`/profile/${chatParticipant ? chatParticipant.id : "undefined"}`}
+                    />
+                    <ChatInfoAction
+                        icon={Search}
+                        title="Search"
+                        link={`/profile/${chatParticipant ? chatParticipant.id : "undefined"}`}
+                    />
                 </div>
 
                 <div className="w-full">

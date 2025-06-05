@@ -57,17 +57,9 @@ async function ProfilePage({ params }: { params: { userId: string } }) {
                 )}
             </div>
 
-            <div className="m-4 p-4 border-2 border-gray-200 dark:border-gray-500 rounded-xl">
-                <h1 className="font-bold text-lg">Intro</h1>
-                <p className="text-center italic">Chasing sunsets and making memories </p>
-            </div>
-            <div className="p-4">
-                <p>
-                    Joined:{" "}
-                    <span className="text-gray-600 dark:text-gray-400 hover:underline">
-                        2 months ago
-                    </span>
-                </p>
+            <h1 className="font-bold text-lg ml-4 mt-4 ">Intro</h1>
+            <div className="mx-4 mt-1 mb-4 p-4 border-2 border-gray-200 dark:border-gray-500 rounded-xl">
+                <p className="text-center italic">{user.shortIntro || "Not set yet"} </p>
             </div>
         </div>
     );

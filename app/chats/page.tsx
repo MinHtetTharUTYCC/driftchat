@@ -136,65 +136,54 @@ function ChatPage() {
         setShowChatWindow(true);
     };
 
-    // Socket set up and message listening
     useEffect(() => {
         if (!loggedInUserId) return;
-        console.log("USERID", loggedInUserId);
 
         const socket = initSocket(loggedInUserId);
         socketRef.current = socket;
 
         const handleReceiveMessage = (newMessage: Message) => {
-            console.log("Received Msg:", newMessage);
+            console.log("✅ Received Msg:", newMessage);
 
             setChatsWithLatestMessage((prevChats) => {
-                //1: find chat that matchs newMessage.chatId
                 const chatIndex = prevChats.findIndex((c) => c.id === newMessage.chatId);
-                if (chatIndex === -1) return prevChats; //not found, ignore
+                if (chatIndex === -1) return prevChats;
 
-                //2: update latest message for that chat
                 const updatedChat = { ...prevChats[chatIndex], latestMessage: newMessage };
-
-                //3: reorder: move updated chat to top(active chat)
                 const updatedChats = [updatedChat, ...prevChats.filter((_, i) => i !== chatIndex)];
-
-                console.log("Chat count: ", updatedChats.length);
                 return updatedChats;
             });
 
-            //Update current chat messages if message belongs to current chat
             if (newMessage.chatId === currentChat?.id) {
                 setCurrentChatMessages((prev) => [...prev, newMessage]);
             }
         };
+
         socket.on("receive-message", handleReceiveMessage);
+
+        // 🔥 Join rooms as soon as socket connects and chats load
+        const joinRooms = () => {
+            chatsWithLatestMessage.forEach((chat) => {
+                socket.emit("join-room", chat.id);
+                console.log("📡 Joined room:", chat.id);
+            });
+        };
+
+        // 👂 Wait until socket is connected and chats are ready
+        if (socket.connected) {
+            joinRooms();
+        } else {
+            socket.on("connect", joinRooms);
+        }
 
         return () => {
             socket.off("receive-message", handleReceiveMessage);
-        };
-    }, [loggedInUserId, currentChat?.id]);
-
-    // Room management
-    useEffect(() => {
-        if (!socketRef.current) return;
-        const socket = socketRef.current;
-
-        const currentChatIds = chatsWithLatestMessage.map((c) => c.id);
-        console.log("[Socket] Managing rooms:", currentChatIds);
-
-        //join all current rooms
-        currentChatIds.forEach((chatId) => {
-            socket.emit("join-room", chatId);
-            console.log("JOIINED>>>");
-        });
-
-        return () => {
-            //leave rooms on cleanup
-            currentChatIds.forEach((chatId) => {
-                socket.emit("leave-room", chatId);
+            socket.off("connect", joinRooms);
+            chatsWithLatestMessage.forEach((chat) => {
+                socket.emit("leave-room", chat.id);
             });
         };
-    }, [chatsWithLatestMessage.map((c) => c.id).join(",")]); //only when chat IDs change
+    }, [loggedInUserId, currentChat?.id, JSON.stringify(chatsWithLatestMessage.map((c) => c.id))]);
 
     // Reset messages when switching chats
     useEffect(() => {
