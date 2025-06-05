@@ -39,6 +39,7 @@ export default async function RootLayout({
     try {
         const user = await prisma.user.findUnique({
             where: { id: userId },
+            select: { id: true, name: true, image: true },
         });
         if (!user) redirect("/api/auth/signin");
 
@@ -50,7 +51,7 @@ export default async function RootLayout({
                     <Providers>
                         <ThemeProvider attribute={"class"} enableSystem defaultTheme="system">
                             <AuthInitializer />
-                            <ClientLayout userId={userId} name={user.name}>
+                            <ClientLayout userId={userId} name={user.name} image={user.image}>
                                 {children}
                             </ClientLayout>
                         </ThemeProvider>

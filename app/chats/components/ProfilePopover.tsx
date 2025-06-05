@@ -5,8 +5,17 @@ import { useTheme } from "next-themes";
 import { ArrowLeft, ChevronRight, LogOut, Moon, User } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import Image from "next/image";
 
-export default function ProfilePopover({ userId, name }: { userId: string; name?: string | null }) {
+export default function ProfilePopover({
+    userId,
+    name,
+    image,
+}: {
+    userId: string;
+    name?: string | null;
+    image?: string | null;
+}) {
     const [isGoingDark, setIsGoingDark] = useState(false);
     const { theme, setTheme } = useTheme();
 
@@ -84,8 +93,23 @@ export default function ProfilePopover({ userId, name }: { userId: string; name?
                         href={`/profile/${userId}`}
                         className="flex items-center p-2 gap-2 hover:bg-stone-100 dark:hover:bg-zinc-700 rounded-lg w-full cursor-pointer"
                     >
-                        <div className="flex items-center justify-center p-2 rounded-full bg-gray-300 dark:bg-gray-600">
-                            <User className="h-8 w-8 text-gray-600 dark:text-gray-300" />
+                        <div className="w-10 h-10 relative flex items-center justify-center">
+                            {!image ? (
+                                <div
+                                    className="w-full h-full flex items-center justify-center p-2 rounded-full bg-gray-300 dark:bg-gray-700 
+                                                                border-2 border-teal-500"
+                                >
+                                    <User className="h-full w-full text-gray-600 dark:text-gray-300" />
+                                </div>
+                            ) : (
+                                <Image
+                                    src={image}
+                                    height={40}
+                                    width={40}
+                                    alt="User Profile"
+                                    className="rounded-full object-cover w-full h-full border-2 border-teal-500"
+                                />
+                            )}
                         </div>
                         <h1 className="text-lg font-bold">{name ?? "Unknown User"}</h1>
                     </Link>

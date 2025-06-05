@@ -3,17 +3,18 @@ import React, { useMemo } from "react";
 import { useAuthStore } from "@/lib/store/useAuthStore";
 import MainHeader from "./components/MainHeader";
 import { usePathname } from "next/navigation";
-import path from "path";
 import BackHeader from "./components/BackHeader";
 
 export default function ClientLayout({
     children,
     userId,
     name,
+    image,
 }: {
     children: React.ReactNode;
     userId: string;
     name?: string | null;
+    image?: string | null;
 }) {
     const pathname = usePathname();
 
@@ -30,13 +31,13 @@ export default function ClientLayout({
     return (
         <div className="flex flex-col h-full">
             <div className="hidden md:block">
-                <MainHeader userId={userId} name={name} />
+                <MainHeader userId={userId} name={name} image={image} />
             </div>
 
             {/* MainHeader on mobile only if NOT hideHeader and showMainNav */}
             {!hideHeader && showMainNav && (
                 <div className="md:hidden">
-                    <MainHeader userId={userId} name={name} />
+                    <MainHeader userId={userId} name={name} image={image} />
                 </div>
             )}
 

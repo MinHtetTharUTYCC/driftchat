@@ -14,6 +14,7 @@ import {
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import ProfileAction from "../components/ProfileAction";
+import Image from "next/image";
 
 async function ProfilePage({ params }: { params: { userId: string } }) {
     const { userId } = params;
@@ -37,8 +38,23 @@ async function ProfilePage({ params }: { params: { userId: string } }) {
         <div className="max-w-3xl mx-auto p-4  dark:bg-zinc-800 rounded-xl shadow-lg">
             <div className="flex flex-col md:flex-row md:items-center border-b border-gray-200 dark:border-gray-500 pb-2">
                 <div className="flex-1 flex items-center gap-4">
-                    <div className="h-fit flex items-center justify-center p-2 rounded-full bg-gray-300 dark:bg-gray-700">
-                        <User className="h-16 w-16 text-gray-600 dark:text-gray-300" />
+                    <div className="w-16 h-16 mx-auto relative flex items-center justify-center">
+                        {!user.image ? (
+                            <div
+                                className="w-full h-full flex items-center justify-center p-2 rounded-full bg-gray-300 dark:bg-gray-700 
+                                        border-2 border-teal-500"
+                            >
+                                <User className="h-full w-full text-gray-600 dark:text-gray-300" />
+                            </div>
+                        ) : (
+                            <Image
+                                src={user.image}
+                                height={128}
+                                width={128}
+                                alt="User Profile"
+                                className="rounded-full object-cover w-full h-full border-2 border-teal-500"
+                            />
+                        )}
                     </div>
                     <div className="flex-1">
                         <h1 className="text-xl font-bold">{user.name ?? "Unknown User"}</h1>

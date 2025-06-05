@@ -72,19 +72,26 @@ function Sidebar({
                             ))}
                         </div>
                     ) : (
-                        chatsWithLatestMessage.map((conversation) => (
-                            <Conversation
-                                key={conversation.id}
-                                conversation={conversation}
-                                currentUserId={currentUserId}
-                                onChatClick={onChatClick}
-                                isActive={
-                                    !isMobile && currentChatId
-                                        ? currentChatId === conversation.id
-                                        : false
-                                }
-                            />
-                        ))
+                        chatsWithLatestMessage.map((conversation) => {
+                            const otherParticipantUser = conversation.participants.find(
+                                (p) => p.userId !== currentUserId
+                            )?.user;
+
+                            return (
+                                <Conversation
+                                    key={conversation.id}
+                                    conversation={conversation}
+                                    currentUserId={currentUserId}
+                                    onChatClick={onChatClick}
+                                    isChatActive={
+                                        !isMobile && currentChatId
+                                            ? currentChatId === conversation.id
+                                            : false
+                                    }
+                                    isOnline={otherParticipantUser?.isOnline ?? false}
+                                />
+                            );
+                        })
                     )}
                 </div>
             )}

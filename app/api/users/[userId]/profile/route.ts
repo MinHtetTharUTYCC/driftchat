@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
     try {
         const userProfile = await prisma.user.findUnique({
             where: { id: session.user.id },
-            select: { name: true, shortIntro: true },
+            select: { name: true, shortIntro: true, image: true },
         });
 
         return NextResponse.json(userProfile);
@@ -32,12 +32,12 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { name, shortIntro } = await req.json();
+    const { name, shortIntro, image } = await req.json();
 
     try {
         await prisma.user.update({
             where: { id: session.user.id },
-            data: { name, shortIntro },
+            data: { name, shortIntro, image },
         });
 
         return NextResponse.json({ success: true });

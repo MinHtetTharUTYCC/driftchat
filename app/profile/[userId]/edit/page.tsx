@@ -1,13 +1,13 @@
 "use client";
-import { useAuthStore } from "@/lib/store/useAuthStore";
-import { RefreshCw } from "lucide-react";
-import { tree } from "next/dist/build/templates/app-page";
-import { redirect, useParams, useRouter } from "next/navigation";
+import { RefreshCw, User } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import ProfileImage from "./components/ProfileImage";
 
 interface ProfileData {
     name: string;
     shortIntro: string;
+    image?: string | null;
 }
 
 function page() {
@@ -15,7 +15,7 @@ function page() {
 
     const { userId } = useParams();
 
-    const [profile, setProfile] = useState<ProfileData>({ name: "", shortIntro: "" });
+    const [profile, setProfile] = useState<ProfileData>({ name: "", shortIntro: "", image: null });
     const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
@@ -29,9 +29,11 @@ function page() {
                 }
 
                 const data = await reponse.json();
+
                 setProfile({
                     name: data.name,
                     shortIntro: data.shortIntro || "",
+                    image: data.image,
                 });
             } catch (err) {
                 setError(err instanceof Error ? err.message : "Failed to load profile");
@@ -48,6 +50,9 @@ function page() {
         const { name, value } = e.target;
         setProfile((prev) => ({ ...prev, [name]: value }));
     };
+    const handleImage = (url: string) => {
+        setProfile((prev) => ({ ...prev, image: url }));
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -58,13 +63,13 @@ function page() {
         try {
             const reponse = await fetch(`/api/users/${userId}/profile`, {
                 method: "POST",
-                headers: { "Content-Type": "applicaiton/json" },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(profile),
             });
             if (!reponse.ok) {
                 throw new Error("Faile to update profile");
             }
-            router.push(`/profile/${userId}`);
+            router.back();
         } catch (err) {
             setError(err instanceof Error ? err.message : "Something went wrong");
             setIsSubmitting(false);
@@ -86,6 +91,8 @@ function page() {
             {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>}
 
             <form onSubmit={handleSubmit}>
+                <ProfileImage url={profile.image} onUrlChange={handleImage} />
+
                 <div className="mb-4">
                     <label
                         htmlFor="name"

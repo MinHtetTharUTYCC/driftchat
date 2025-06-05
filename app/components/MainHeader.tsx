@@ -5,8 +5,18 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { PopoverContent } from "@radix-ui/react-popover";
 import ProfilePopover from "../chats/components/ProfilePopover";
+import Image from "next/image";
+import UserImage from "./UserImage";
 
-function MainHeader({ userId, name }: { userId: string; name?: string | null }) {
+function MainHeader({
+    userId,
+    name,
+    image,
+}: {
+    userId: string;
+    name?: string | null;
+    image?: string | null;
+}) {
     return (
         <div className="h-30 flex items-center justify-between px-4 py-2 shadow-lg bg-light-background dark:bg-dark-background z-50">
             <h1 className="text-2xl font-bold">DriftChat</h1>
@@ -16,9 +26,7 @@ function MainHeader({ userId, name }: { userId: string; name?: string | null }) 
                         <TooltipTrigger asChild>
                             <PopoverTrigger asChild>
                                 <div className="relative cursor-pointer">
-                                    <div className="flex items-center justify-center p-2 rounded-full bg-gray-300 dark:bg-gray-600">
-                                        <User className="h-6 w-6 text-gray-600 dark:text-gray-300" />
-                                    </div>
+                                    <UserImage image={image} />
                                     <div className="absolute right-0 bottom-0 flex items-center justify-center p-[3px] bg-gray-400 rounded-full">
                                         <ChevronDown className="h-3 w-3" />
                                     </div>
@@ -32,7 +40,7 @@ function MainHeader({ userId, name }: { userId: string; name?: string | null }) 
                         </TooltipContent>
                     </Tooltip>
                     <PopoverContent className=" mr-5 bg-white dark:bg-zinc-800 p-4 focus:outline-none rounded-xl shadow-md">
-                        <ProfilePopover userId={userId} name={name} />
+                        <ProfilePopover userId={userId} name={name} image={image} />
                     </PopoverContent>
                 </Popover>
             </TooltipProvider>

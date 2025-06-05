@@ -87,7 +87,7 @@ function ChatWindow({
                     isMobile={isMobile}
                     participantName={otherParticipantUser?.name}
                     participantUserId={otherParticipantUser?.id}
-                    isOnline={otherParticipantUser?.isOnline!}
+                    isOnline={otherParticipantUser?.isOnline ?? false}
                     lastSeen={otherParticipantUser?.lastSeen}
                 />
 
