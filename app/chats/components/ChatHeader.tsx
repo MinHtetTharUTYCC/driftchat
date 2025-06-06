@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import React from "react";
+import { toast } from "sonner";
 
 function ChatHeader({
     onBackToSidebar,
@@ -27,6 +28,8 @@ function ChatHeader({
 }) {
     const router = useRouter();
 
+    console.log("Img:", participantUserImage);
+
     return (
         <div className="rounded-t-lg bg-gray-200 dark:bg-zinc-900 p-2 flex items-center justify-between shadow-md">
             <div className="flex items-center justify-center gap-1">
@@ -40,7 +43,7 @@ function ChatHeader({
                     onClick={() => router.push(`/profile/${participantUserId}`)}
                 >
                     <div className="relative h-fit flex items-center justify-center rounded-full bg-gray-300 dark:bg-gray-600">
-                        <div className="w-10 h-10 mx-auto relative flex items-center justify-center">
+                        <div className="w-10 h-10 mx-auto flex items-center justify-center">
                             {!participantUserImage ? (
                                 <div className="w-10 h-10 flex items-center justify-center p-2 rounded-full bg-gray-300 dark:bg-gray-700">
                                     <User className="h-full w-full text-gray-600 dark:text-gray-300" />
@@ -50,7 +53,7 @@ function ChatHeader({
                                     src={participantUserImage}
                                     height={40}
                                     width={40}
-                                    alt="My Profile"
+                                    alt="User Image"
                                     className="rounded-full object-cover w-full h-full "
                                 />
                             )}
@@ -73,10 +76,16 @@ function ChatHeader({
                 </div>
             </div>
             <div className="flex items-center justify-center  gap-2 mr-2">
-                <div className="flex items-center p-2 justify-center rounded-full hover:bg-gray-50 dark:hover:bg-zinc-700 cursor-pointer">
+                <div
+                    onClick={() => toast.info("Audio call is unavailable now!")}
+                    className="flex items-center p-2 justify-center rounded-full hover:bg-gray-50 dark:hover:bg-zinc-700 cursor-pointer"
+                >
                     <Phone className="h-5 w-5 text-teal-500" />
                 </div>
-                <div className="flex items-center p-2 justify-center rounded-full hover:bg-gray-50 dark:hover:bg-zinc-700  cursor-pointer">
+                <div
+                    onClick={() => toast.info("Video call is unavailable now!")}
+                    className="flex items-center p-2 justify-center rounded-full hover:bg-gray-50 dark:hover:bg-zinc-700  cursor-pointer"
+                >
                     <Video className="h-5 w-5 text-teal-500" />
                 </div>
                 <div

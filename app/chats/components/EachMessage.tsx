@@ -3,33 +3,50 @@
 import { Message as PrismaMessage } from "@prisma/client";
 import { format, isThisWeek, isThisYear, isToday, isYesterday } from "date-fns";
 import { User } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 
 function EachMessage({
     message,
     currentUserId,
+    participantUserId,
+    participantUserImage,
 }: {
     message: PrismaMessage;
     currentUserId?: string | null;
+    participantUserId?: string | null;
+    participantUserImage?: string | null;
 }) {
     const isMessageMine = currentUserId === message.senderId;
 
     const [showDate, setShowDate] = useState(false);
 
     return (
-        <div
-            className={`flex gap-3 ${
-                isMessageMine ? "justify-end" : "justify-start"
-            } cursor-pointer`}
-        >
+        <div className={`flex gap-3 ${isMessageMine ? "justify-end" : "justify-start"}`}>
             {!isMessageMine && (
-                <div className="h-fit flex items-center justify-center p-2 rounded-full bg-gray-300 dark:bg-gray-600">
-                    <User className="h-4 w-4 text-gray-600 dark:text-gray-300" />
-                </div>
+                <Link
+                    className="w-6 h-6 flex items-center justify-center cursor-pointer"
+                    href={`/profile/${participantUserId}`}
+                >
+                    {!participantUserImage ? (
+                        <div className="w-6 h-6 flex items-center p-1 justify-center rounded-full bg-gray-300 dark:bg-gray-700">
+                            <User className="h-full w-full text-gray-600 dark:text-gray-300" />
+                        </div>
+                    ) : (
+                        <Image
+                            src={participantUserImage}
+                            height={24}
+                            width={24}
+                            alt={`chat user profile`}
+                            className="rounded-full object-cover w-full h-full"
+                        />
+                    )}
+                </Link>
             )}
 
             <div
-                className={`max-w-[80%] flex flex-col ${
+                className={`max-w-[80%] flex flex-col cursor-pointer ${
                     isMessageMine ? "items-end" : "items-start"
                 }`}
                 onClick={() => setShowDate((prev) => !prev)}

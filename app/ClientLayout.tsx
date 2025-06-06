@@ -1,9 +1,9 @@
 "use client";
 import React, { useMemo } from "react";
-import { useAuthStore } from "@/lib/store/useAuthStore";
 import MainHeader from "./components/MainHeader";
 import { usePathname } from "next/navigation";
 import BackHeader from "./components/BackHeader";
+import { useUiStore } from "@/lib/store/useUiStore";
 
 export default function ClientLayout({
     children,
@@ -18,7 +18,7 @@ export default function ClientLayout({
 }) {
     const pathname = usePathname();
 
-    const hideHeader = useAuthStore((state) => state.hideHeader);
+    const hideHeader = useUiStore((state) => state.hideHeader);
 
     const showMainNav = useMemo(() => {
         return !pathname.startsWith("/profile");

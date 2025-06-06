@@ -85,8 +85,9 @@ function ChatWindow({
                     onBackToSidebar={onBackToSidebar}
                     onToggleChatInfo={onToggleChatInfo}
                     isMobile={isMobile}
-                    participantName={otherParticipantUser?.name}
                     participantUserId={otherParticipantUser?.id}
+                    participantName={otherParticipantUser?.name}
+                    participantUserImage={otherParticipantUser?.image}
                     isOnline={otherParticipantUser?.isOnline ?? false}
                     lastSeen={otherParticipantUser?.lastSeen}
                 />
@@ -132,6 +133,8 @@ function ChatWindow({
                                 key={message.id}
                                 message={message}
                                 currentUserId={currentUserId}
+                                participantUserId={otherParticipantUser?.id}
+                                participantUserImage={otherParticipantUser?.image}
                             />
                         ))
                     )}

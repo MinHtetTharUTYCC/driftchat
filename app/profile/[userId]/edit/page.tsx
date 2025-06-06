@@ -20,6 +20,8 @@ function page() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
+    const [isImgUploading, setIsImgUploading] = useState(false);
+
     useEffect(() => {
         const fetchProfile = async () => {
             try {
@@ -69,7 +71,7 @@ function page() {
             if (!reponse.ok) {
                 throw new Error("Faile to update profile");
             }
-            router.back();
+            router.push(`/profile/${userId}`);
         } catch (err) {
             setError(err instanceof Error ? err.message : "Something went wrong");
             setIsSubmitting(false);
@@ -91,7 +93,11 @@ function page() {
             {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>}
 
             <form onSubmit={handleSubmit}>
-                <ProfileImage url={profile.image} onUrlChange={handleImage} />
+                <ProfileImage
+                    url={profile.image}
+                    onUrlChange={handleImage}
+                    onUploading={(isUploading) => setIsImgUploading(isUploading)}
+                />
 
                 <div className="mb-4">
                     <label
@@ -105,7 +111,7 @@ function page() {
                         id="name"
                         name="name"
                         className="w-full px-3 py-2 border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-                        value={profile.name}
+                        value={profile.name ?? "Unknown User"}
                         onChange={handleChange}
                         required
                         minLength={3}
@@ -144,7 +150,7 @@ function page() {
                     </button>
                     <button
                         type="submit"
-                        disabled={isSubmitting}
+                        disabled={isImgUploading || isSubmitting}
                         className="px-4 py-2 text-white bg-teal-600 rounded-md hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isSubmitting ? "Saving..." : "Save Changes"}

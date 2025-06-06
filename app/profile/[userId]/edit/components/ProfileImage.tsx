@@ -2,14 +2,16 @@
 
 import { Camera, Loader2, User } from "lucide-react";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 function ProfileImage({
     url,
     onUrlChange,
+    onUploading,
 }: {
     url?: string | null;
     onUrlChange: (url: string) => void;
+    onUploading: (isUploading: boolean) => void;
 }) {
     const [isUploading, setIsUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -51,6 +53,11 @@ function ProfileImage({
             setIsUploading(false);
         }
     };
+
+    useEffect(() => {
+        onUploading(isUploading);
+    }, [isUploading]);
+
     return (
         <div className="w-fit mx-auto mb-4">
             <div className="w-32 h-32 mx-auto relative flex items-center justify-center">

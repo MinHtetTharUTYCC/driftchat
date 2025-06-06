@@ -9,6 +9,7 @@ import { ThemeProvider } from "next-themes";
 import AuthInitializer from "@/components/AuthInitializer";
 import { Providers } from "./providers";
 import ClientLayout from "./ClientLayout";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -54,6 +55,7 @@ export default async function RootLayout({
                             <ClientLayout userId={userId} name={user.name} image={user.image}>
                                 {children}
                             </ClientLayout>
+                            <Toaster />
                         </ThemeProvider>
                     </Providers>
                 </body>

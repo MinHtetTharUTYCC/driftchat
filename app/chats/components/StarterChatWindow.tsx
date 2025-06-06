@@ -102,7 +102,7 @@ const StarterChatWindow = forwardRef<StarterChatWindowHandle, StarterChatWindowP
                 )}
 
                 <div className="flex-1 flex flex-col items-center justify-center  text-center">
-                    <MessageSquareDiff className="h-12 w-12" />
+                    <MessageSquareDiff className="h-12 w-12 text-teal-500" />
                     <h1 className="text-xl text-center">Start a New Chat!</h1>
                 </div>
             </div>

@@ -1,12 +1,11 @@
 import React from "react";
 import { ChevronDown, User } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { PopoverContent } from "@radix-ui/react-popover";
 import ProfilePopover from "../chats/components/ProfilePopover";
-import Image from "next/image";
 import UserImage from "./UserImage";
+import Link from "next/link";
 
 function MainHeader({
     userId,
@@ -19,7 +18,9 @@ function MainHeader({
 }) {
     return (
         <div className="h-30 flex items-center justify-between px-4 py-2 shadow-lg bg-light-background dark:bg-dark-background z-50">
-            <h1 className="text-2xl font-bold">DriftChat</h1>
+            <Link className="text-2xl font-bold" href={"/"}>
+                DriftChat
+            </Link>
             <TooltipProvider>
                 <Popover>
                     <Tooltip delayDuration={200}>

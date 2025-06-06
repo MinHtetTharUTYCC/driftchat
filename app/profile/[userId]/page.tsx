@@ -1,20 +1,12 @@
 import React from "react";
 import { prisma } from "@/lib/db/prismaDB";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import {
-    Ban,
-    MessageCircleMore,
-    Pencil,
-    SeparatorHorizontal,
-    SeparatorVertical,
-    User,
-} from "lucide-react";
+import { Ban, Pencil, User } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import ProfileAction from "../components/ProfileAction";
 import Image from "next/image";
+import ProfileActionMessage from "../components/ProfileActionMessage";
+import ImageToModal from "./edit/components/ImageToModal";
 
 async function ProfilePage({ params }: { params: { userId: string } }) {
     const { userId } = params;
@@ -47,13 +39,7 @@ async function ProfilePage({ params }: { params: { userId: string } }) {
                                 <User className="h-full w-full text-gray-600 dark:text-gray-300" />
                             </div>
                         ) : (
-                            <Image
-                                src={user.image}
-                                height={128}
-                                width={128}
-                                alt="User Profile"
-                                className="rounded-full object-cover w-full h-full border-2 border-teal-500"
-                            />
+                            <ImageToModal imgUrl={user.image} />
                         )}
                     </div>
                     <div className="flex-1">
@@ -69,7 +55,7 @@ async function ProfilePage({ params }: { params: { userId: string } }) {
                         icon={Pencil}
                     />
                 ) : (
-                    <ProfileAction href="/messageTo" text="Message" icon={MessageCircleMore} />
+                    <ProfileActionMessage userId={userId} />
                 )}
             </div>
 

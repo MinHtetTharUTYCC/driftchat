@@ -15,7 +15,7 @@ function MoreChatInfo({
     return (
         <div className="w-full text-sm font-semibold">
             <div
-                className="w-full flex items-center justify-between p-2 rounded bg-transparent hover:bg-gray-200 dark:hover:bg-zinc-700"
+                className="w-full flex items-center justify-between p-2 rounded bg-transparent hover:bg-gray-200 dark:hover:bg-zinc-700 cursor-pointer"
                 onClick={() => setActive((prev) => !prev)}
             >
                 <p>{title}</p>
@@ -26,7 +26,7 @@ function MoreChatInfo({
                 childs.map((c) => (
                     <div
                         key={c.subTitle}
-                        className="w-full ml-4 flex items-center gap-2 p-2 rounded bg-transparent hover:bg-gray-200 dark:hover:bg-zinc-700"
+                        className="w-full ml-4 flex items-center gap-2 p-2 rounded bg-transparent hover:bg-gray-200 dark:hover:bg-zinc-700 cursor-pointer"
                     >
                         <c.icon className={`h-5 w-5 ${isColored ? `text-teal-500` : ``}`} />
                         <p>{c.subTitle}</p>

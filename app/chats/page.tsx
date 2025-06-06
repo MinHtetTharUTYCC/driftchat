@@ -10,6 +10,7 @@ import { Socket } from "socket.io-client";
 import ChatWindow from "./components/ChatWindow";
 import StarterChatWindow from "./components/StarterChatWindow";
 import ChatInfo from "./components/chat-info/ChatInfo";
+import { useUiStore } from "@/lib/store/useUiStore";
 
 function ChatPage() {
     const socketRef = useRef<Socket | null>(null);
@@ -31,9 +32,9 @@ function ChatPage() {
     const [isLoadingCurrentChat, setIsLoadingCurrentChat] = useState(false);
 
     const [isMobile, setIsMobile] = useState(false);
-    const [showChatWindow, setShowChatWindow] = useState(false);
 
-    const [showChatInfo, setShowChatInfo] = useState(false);
+    const { showChatWindow, setShowChatWindow } = useUiStore();
+    const { showChatInfo, setShowChatInfo } = useUiStore();
 
     const loggedInUserId = useAuthStore((state) => state.userId);
 
@@ -41,7 +42,7 @@ function ChatPage() {
         (p) => p.userId !== loggedInUserId
     )?.user;
 
-    const setHideHeader = useAuthStore((state) => state.setHideHeader);
+    const setHideHeader = useUiStore((state) => state.setHideHeader);
 
     useEffect(() => {
         const fetchChats = async () => {
@@ -242,7 +243,7 @@ function ChatPage() {
                                 if (isMobile) {
                                     setShowChatWindow(false);
                                 }
-                                setShowChatInfo((prev) => !prev);
+                                setShowChatInfo(!showChatInfo);
                             }}
                         />
                     )}

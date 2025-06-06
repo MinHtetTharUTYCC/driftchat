@@ -11,7 +11,7 @@ export async function GET(req: NextRequest, context: { params: { chatId: string 
     }
 
     try {
-        const { chatId } = context.params;
+        const { chatId } = await context.params;
 
         const chat = await prisma.chat.findUnique({
             where: {

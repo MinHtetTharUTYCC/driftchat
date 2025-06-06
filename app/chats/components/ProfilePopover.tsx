@@ -6,6 +6,7 @@ import { ArrowLeft, ChevronRight, LogOut, Moon, User } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Image from "next/image";
+import { signOut } from "next-auth/react";
 
 export default function ProfilePopover({
     userId,
@@ -27,7 +28,7 @@ export default function ProfilePopover({
     };
 
     return (
-        <div className="w-[400px] flex flex-col ">
+        <div className="w-[400px] flex flex-col">
             {isGoingDark ? (
                 <>
                     <div className="flex items-center p-2 gap-2 rounded-lg w-full">
@@ -125,7 +126,10 @@ export default function ProfilePopover({
                         </div>
                         <ChevronRight className="h-6 w-6" />
                     </div>
-                    <div className="flex items-center px-2 py-1 gap-2 rounded-lg hover:bg-stone-100 dark:hover:bg-zinc-700 w-full cursor-pointer">
+                    <div
+                        onClick={() => signOut({ callbackUrl: "/" })}
+                        className="flex items-center px-2 py-1 gap-2 rounded-lg hover:bg-stone-100 dark:hover:bg-zinc-700 w-full cursor-pointer"
+                    >
                         <div className="flex items-center p-2 gap-2">
                             <div className="flex items-center p-2 justify-center rounded-full bg-gray-200 dark:bg-zinc-500">
                                 <LogOut className="h-5 w-5" />

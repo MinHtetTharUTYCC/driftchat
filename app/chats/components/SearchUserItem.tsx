@@ -1,44 +1,13 @@
 import React from "react";
 import { User as PrismaUser } from "@prisma/client";
 import { User } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useChatCheck } from "@/lib/useChatCheck";
 
 function SearchUserItem({ user, onShowChat }: { user: PrismaUser; onShowChat: () => void }) {
-    const router = useRouter();
+    const { checkChat } = useChatCheck();
 
-    const handleCheck = async () => {
-        try {
-            const checkResponse = await fetch(
-                `/api/chats/check?userId=${encodeURIComponent(user.id)}`
-            );
-            if (!checkResponse.ok) throw new Error("Failed to check chat!");
-
-            const { chatId, exists } = await checkResponse.json();
-
-            if (!exists) {
-                //create new chat
-                const createResponse = await fetch("/api/chats", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        participantId: user.id,
-                    }),
-                });
-
-                const newChat = await createResponse.json();
-                router.push(`/chats?chatId=${newChat.id}`);
-                onShowChat();
-            } else {
-                //Navigate to existing chat
-                router.push(`/chats?chatId=${chatId}`);
-                onShowChat();
-            }
-        } catch (error) {
-            console.error("Error checking chat", error);
-            // Fallback if API calls fail
-            //TODO: may be remove window reloading_under_this_line
-            window.location.reload();
-        }
+    const handleCheck = () => {
+        checkChat(user.id, onShowChat);
     };
 
     return (

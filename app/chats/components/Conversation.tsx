@@ -1,6 +1,7 @@
 "use client";
 import { ChatWithLatestMessage } from "@/types";
 import { MoreHorizontal, User } from "lucide-react";
+import Image from "next/image";
 import React, { useState } from "react";
 
 type ConversationProps = {
@@ -31,8 +32,22 @@ function Conversation({
             }  ${isChildHovered ? "bg-transparent" : "hover:bg-gray-200 dark:hover:bg-zinc-700"}`}
             onClick={() => onChatClick(conversation.id)}
         >
-            <div className="relative flex items-center justify-center p-2 rounded-full bg-gray-300 dark:bg-gray-600">
-                <User className="h-6 w-6 text-gray-600 dark:text-gray-300" />
+            <div className="relative flex items-center justify-center rounded-full bg-gray-300 dark:bg-gray-600">
+                <div className="w-10 h-10 mx-auto relative flex items-center justify-center">
+                    {!otherParticipantUser?.image ? (
+                        <div className="w-10 h-10 flex items-center justify-center p-1 rounded-full bg-gray-300 dark:bg-gray-700">
+                            <User className="h-full w-full text-gray-600 dark:text-gray-300" />
+                        </div>
+                    ) : (
+                        <Image
+                            src={otherParticipantUser.image}
+                            height={40}
+                            width={40}
+                            alt={`${otherParticipantUser.name} profile`}
+                            className="rounded-full object-cover w-full h-full"
+                        />
+                    )}
+                </div>
                 {isOnline && (
                     <span className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-green-500 border-2 border-white dark:border-zinc-800" />
                 )}
