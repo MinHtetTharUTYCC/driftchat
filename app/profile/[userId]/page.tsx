@@ -2,10 +2,10 @@ import React from "react";
 import { prisma } from "@/lib/db/prismaDB";
 import { Ban, Pencil, User } from "lucide-react";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import ProfileAction from "../components/ProfileAction";
 import ProfileActionMessage from "../components/ProfileActionMessage";
 import ImageToModal from "./edit/components/ImageToModal";
+import { authOptions } from "@/lib/authOptions";
 
 async function ProfilePage({ params }: { params: { userId: string } }) {
     const { userId } = params;
