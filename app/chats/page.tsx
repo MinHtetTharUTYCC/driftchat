@@ -1,6 +1,6 @@
 "use client";
 import Sidebar from "@/app/components/Sidebar";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { ChatWithLatestMessage, ExtendedChat } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/lib/store/useAuthStore";
@@ -12,7 +12,31 @@ import StarterChatWindow from "./components/StarterChatWindow";
 import ChatInfo from "./components/chat-info/ChatInfo";
 import { useUiStore } from "@/lib/store/useUiStore";
 
-function ChatPage() {
+function ChatPageSkeleton() {
+    return (
+        <div className="flex h-full">
+            <div className="w-1/4 border-r bg-gray-50 animate-pulse">
+                <div className="p-4 space-y-3">
+                    <div className="h-4 bg-gray-200 rounded"></div>
+                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                </div>
+            </div>
+            <div className="flex-1 flex flex-col">
+                <div className="flex-1 p-4 space-y-3">
+                    <div className="h-16 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="h-16 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="h-16 bg-gray-200 rounded animate-pulse"></div>
+                </div>
+                <div className="p-4 border-t">
+                    <div className="h-12 bg-gray-200 rounded animate-pulse"></div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function ChatPageContent() {
     const socketRef = useRef<Socket | null>(null);
 
     const router = useRouter();
@@ -236,7 +260,6 @@ function ChatPage() {
                         />
                     ) : (
                         <ChatWindow
-                            // ref={chatWindowSearchInputRef}
                             onBackToSidebar={backToSidebar}
                             isMobile={isMobile}
                             currentChat={currentChat}
@@ -263,6 +286,14 @@ function ChatPage() {
                 </div>
             )}
         </div>
+    );
+}
+
+function ChatPage() {
+    return (
+        <Suspense fallback={<ChatPageSkeleton />}>
+            <ChatPageContent />
+        </Suspense>
     );
 }
 
