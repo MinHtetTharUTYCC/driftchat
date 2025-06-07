@@ -7,8 +7,8 @@ import ProfileActionMessage from "../components/ProfileActionMessage";
 import ImageToModal from "./edit/components/ImageToModal";
 import { authOptions } from "@/lib/authOptions";
 
-async function ProfilePage({ params }: { params: { userId: string } }) {
-    const { userId } = params;
+async function ProfilePage({ params }: { params: Promise<{ userId: string }> }) {
+    const { userId } = await params;
     const session = await getServerSession(authOptions);
 
     const user = await prisma.user.findUnique({

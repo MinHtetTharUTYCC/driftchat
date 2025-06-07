@@ -4,14 +4,14 @@ import { prisma } from "@/lib/db/prismaDB";
 import { getNextAuthSession } from "@/lib/nextauthSession/session";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest, context: { params: { chatId: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ chatId: string }> }) {
     const session = await getNextAuthSession();
     if (!session) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     try {
-        const { chatId } = await context.params;
+        const { chatId } = await params;
 
         const chat = await prisma.chat.findUnique({
             where: {

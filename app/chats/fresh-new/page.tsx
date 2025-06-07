@@ -53,6 +53,7 @@ function RreshNewChatPage() {
                         ref={chatWindowSearchInputRef}
                         onBackToSidebar={backToSidebar}
                         isMobile={isMobile}
+                        onShowChat={() => {}}
                     />
                 </div>
             )}

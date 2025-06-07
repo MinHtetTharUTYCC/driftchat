@@ -2,11 +2,11 @@ import { prisma } from "@/lib/db/prismaDB";
 import { getNextAuthSession } from "@/lib/nextauthSession/session";
 import { NextRequest, NextResponse } from "next/server";
 
-// export async function GET(req: NextRequest, {params}: { params: { chatId: string } }) {
+// export async function GET(req: NextRequest, { params }: { params: Promise<{ chatId: string }> }) {
 //     const session = await getNextAuthSession();
 //     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-//     const { chatId } = context.params;
+//     const { chatId } = await params;
 
 //     const messages = await prisma.message.findMany({
 //         where: { chatId: chatId },
