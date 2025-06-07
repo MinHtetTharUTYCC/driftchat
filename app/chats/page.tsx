@@ -115,7 +115,6 @@ function ChatPage() {
     }, [isMobile, showChatWindow, showChatInfo]);
 
     const goToNewChat = () => {
-        // TODO: new Chat query
         router.push("/chats?chatId=newChat");
         setShowChatWindow(true);
     };

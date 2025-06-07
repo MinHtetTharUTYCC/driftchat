@@ -17,7 +17,6 @@ export default function ClientLayout({
     image?: string | null;
 }) {
     const pathname = usePathname();
-
     const hideHeader = useUiStore((state) => state.hideHeader);
 
     const showMainNav = useMemo(() => {

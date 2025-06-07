@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import MainHeader from "./components/MainHeader";
 import { getNextAuthSession } from "@/lib/nextauthSession/session";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prismaDB";
@@ -31,38 +30,37 @@ export default async function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const session = await getNextAuthSession();
-    if (!session?.user?.id) {
-        redirect("/api/auth/signin");
-    }
-    const userId = session.user.id as string;
+    const session = await getNextAuthSession().catch(() => null);
+    const userId = session?.user?.id as string;
 
-    try {
-        const user = await prisma.user.findUnique({
-            where: { id: userId },
-            select: { id: true, name: true, image: true },
-        });
-        if (!user) redirect("/api/auth/signin");
+    const user = userId
+        ? await prisma.user
+              .findUnique({
+                  where: { id: userId },
+                  select: { id: true, name: true, image: true },
+              })
+              .catch(() => null)
+        : null;
 
-        return (
-            <html lang="en" className="h-full" suppressHydrationWarning>
-                <body
-                    className={`${geistSans.variable} ${geistMono.variable} antialiased h-full bg-light-background dark:bg-dark-background`}
-                >
-                    <Providers>
-                        <ThemeProvider attribute={"class"} enableSystem defaultTheme="system">
-                            <AuthInitializer />
-                            <ClientLayout userId={userId} name={user.name} image={user.image}>
+    return (
+        <html lang="en" className="h-full" suppressHydrationWarning>
+            <body
+                className={`${geistSans.variable} ${geistMono.variable} antialiased h-full bg-light-background dark:bg-dark-background`}
+            >
+                <Providers>
+                    <ThemeProvider attribute={"class"} enableSystem defaultTheme="system">
+                        <AuthInitializer />
+                        {userId ? (
+                            <ClientLayout userId={userId} name={user?.name} image={user?.image}>
                                 {children}
                             </ClientLayout>
-                            <Toaster />
-                        </ThemeProvider>
-                    </Providers>
-                </body>
-            </html>
-        );
-    } catch (error) {
-        console.error("Failed to fetch user:", error);
-        redirect("/api/auth/signin");
-    }
+                        ) : (
+                            <>{children}</>
+                        )}
+                        <Toaster />
+                    </ThemeProvider>
+                </Providers>
+            </body>
+        </html>
+    );
 }
