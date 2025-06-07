@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { ArrowLeft, ChevronRight, LogOut, Moon, User } from "lucide-react";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
@@ -78,8 +77,8 @@ export default function ProfilePopover({
                                     <label htmlFor="r3" className="flex flex-col">
                                         <p className="font-semibold">Automatic</p>
                                         <p className="text-gray-500 dark:text-gray-400">
-                                            Automatically adjust the display based on your device's
-                                            system settings.
+                                            Automatically adjust the display based on your
+                                            device&apos;s system settings.
                                         </p>
                                     </label>
                                     <RadioGroupItem value="system" id="r3" className="mr-2" />

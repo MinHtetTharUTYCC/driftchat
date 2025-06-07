@@ -1,7 +1,6 @@
 "use client";
 import React, { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { ArrowLeft, Search, X } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 function SearchBox({

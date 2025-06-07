@@ -46,7 +46,7 @@ const StarterChatWindow = forwardRef<StarterChatWindowHandle, StarterChatWindowP
                     const data = await res.json();
                     setAllUsers(data.allUsers);
                 } catch (error) {
-                    console.error("Error fetching users");
+                    console.error("Error fetching users", error);
                 }
             };
 
@@ -110,4 +110,5 @@ const StarterChatWindow = forwardRef<StarterChatWindowHandle, StarterChatWindowP
     }
 );
 
+StarterChatWindow.displayName = "StarterChatWindow";
 export default StarterChatWindow;

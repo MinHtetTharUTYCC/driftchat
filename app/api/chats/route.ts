@@ -1,12 +1,8 @@
-// GET: list chats
-// POST: create chat
-
 import { prisma } from "@/lib/db/prismaDB";
 import { getNextAuthSession } from "@/lib/nextauthSession/session";
-import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
     const session = await getNextAuthSession();
     if (!session) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

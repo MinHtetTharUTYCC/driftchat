@@ -1,5 +1,5 @@
 import { useUiStore } from "@/lib/store/useUiStore";
-import { formatDistanceToNow, isToday } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { ArrowLeft, Info, Phone, User, Video } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

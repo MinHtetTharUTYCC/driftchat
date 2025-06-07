@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { getNextAuthSession } from "@/lib/nextauthSession/session";
-import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prismaDB";
 import { ThemeProvider } from "next-themes";
 import AuthInitializer from "@/components/AuthInitializer";

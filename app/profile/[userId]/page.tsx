@@ -4,7 +4,6 @@ import { Ban, Pencil, User } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import ProfileAction from "../components/ProfileAction";
-import Image from "next/image";
 import ProfileActionMessage from "../components/ProfileActionMessage";
 import ImageToModal from "./edit/components/ImageToModal";
 

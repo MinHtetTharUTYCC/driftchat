@@ -1,6 +1,6 @@
 "use client";
 import Sidebar from "@/app/components/Sidebar";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ChatWithLatestMessage, ExtendedChat } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/lib/store/useAuthStore";
@@ -23,6 +23,10 @@ function ChatPage() {
 
     const [chatsWithLatestMessage, setChatsWithLatestMessage] = useState<ChatWithLatestMessage[]>(
         []
+    );
+    const chatIds = useMemo(
+        () => chatsWithLatestMessage.map((c) => c.id),
+        [chatsWithLatestMessage]
     );
     const [currentChat, setCurrentChat] = useState<ExtendedChat | null>(null);
 
@@ -90,7 +94,7 @@ function ChatPage() {
         };
 
         fetchChat();
-    }, [chatId]);
+    }, [chatId, isNewChat]);
 
     //for not mobile
     const chatWindowSearchInputRef = useRef<{ focusInput: () => void }>(null);
@@ -112,7 +116,7 @@ function ChatPage() {
 
     useEffect(() => {
         setHideHeader(isMobile && (showChatWindow || showChatInfo));
-    }, [isMobile, showChatWindow, showChatInfo]);
+    }, [isMobile, showChatWindow, showChatInfo, setHideHeader]);
 
     const goToNewChat = () => {
         router.push("/chats?chatId=newChat");
@@ -183,7 +187,7 @@ function ChatPage() {
                 socket.emit("leave-room", chat.id);
             });
         };
-    }, [loggedInUserId, currentChat?.id, JSON.stringify(chatsWithLatestMessage.map((c) => c.id))]);
+    }, [loggedInUserId, currentChat?.id, chatIds]);
 
     // Reset messages when switching chats
     useEffect(() => {

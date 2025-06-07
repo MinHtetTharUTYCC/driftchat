@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import NewChatButton from "../chats/components/NewChatButton";
 import SearchList from "../chats/components/SearchList";
 import SearchBox from "../chats/components/SearchBox";
-
-import { ChatWithLatestMessage, ExtendedChat } from "@/types";
+import { ChatWithLatestMessage } from "@/types";
 import Conversation from "../chats/components/Conversation";
 import { useAuthStore } from "@/lib/store/useAuthStore";
 import { Skeleton } from "@/components/ui/skeleton";

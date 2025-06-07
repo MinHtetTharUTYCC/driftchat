@@ -1,5 +1,5 @@
 "use client";
-import { RefreshCw, User } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import ProfileImage from "./components/ProfileImage";
@@ -10,7 +10,7 @@ interface ProfileData {
     image?: string | null;
 }
 
-function page() {
+function ProfilePage() {
     const router = useRouter();
 
     const { userId } = useParams();
@@ -161,4 +161,4 @@ function page() {
     );
 }
 
-export default page;
+export default ProfilePage;

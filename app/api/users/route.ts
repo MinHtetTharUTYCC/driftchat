@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { prisma } from "@/lib/db/prismaDB";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
     const session = await getServerSession(authOptions);
 
     const allUsers = await prisma.user.findMany({

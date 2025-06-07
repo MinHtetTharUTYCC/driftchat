@@ -3,8 +3,6 @@ import React from "react";
 
 function NewChatButton({
     onNewChat,
-    onDesktopFocus,
-    isMobile,
 }: {
     onNewChat: () => void;
     onDesktopFocus: () => void;

@@ -56,7 +56,7 @@ function ProfileImage({
 
     useEffect(() => {
         onUploading(isUploading);
-    }, [isUploading]);
+    }, [isUploading, onUploading]);
 
     return (
         <div className="w-fit mx-auto mb-4">

@@ -22,7 +22,7 @@ function SearchList({ query, onShowChat }: { query: string; onShowChat: () => vo
                 const data = await res.json();
                 setAllUsers(data.allUsers);
             } catch (error) {
-                console.error("Error fetching users");
+                console.error("Error fetching users", error);
             } finally {
                 setLoading(false);
             }

@@ -30,8 +30,6 @@ function RegisterPage() {
     const {
         register,
         handleSubmit,
-        watch,
-        setValue,
         formState: { errors, isSubmitting },
     } = useForm<FormValues>({
         resolver: zodResolver(formSchema),

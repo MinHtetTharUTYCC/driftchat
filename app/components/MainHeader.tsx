@@ -1,5 +1,5 @@
 import React from "react";
-import { ChevronDown, User } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { PopoverContent } from "@radix-ui/react-popover";
