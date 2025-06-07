@@ -1,10 +1,8 @@
 import NextAuth, { AuthOptions } from "next-auth";
-import EmailProvider from "next-auth/providers/email";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/lib/db/prismaDB";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcrypt";
 
 export const authOptions: AuthOptions = {
     pages: {
@@ -12,43 +10,41 @@ export const authOptions: AuthOptions = {
     },
     adapter: PrismaAdapter(prisma),
     providers: [
-        EmailProvider({
-            from: process.env.EMAIL_FROM || "onboarding@resend.dev",
-            sendVerificationRequest: async ({ identifier, url }) => {
-                const { error } = await resend.emails.send({
-                    from: process.env.EMAIL_FROM || "onboarding@resend.dev",
-                    to: identifier,
-                    subject: "Sign in to DriftChat",
-                    html: `<p>Click <a href="${url}">here</a> to sign in.</p>
-                 <p>This link will expire in 10 minutes.</p>`,
+        CredentialsProvider({
+            name: "Credentials",
+            credentials: {
+                email: { label: "Email", type: "text" },
+                password: { label: "Password", type: "password" },
+            },
+            async authorize(credentials) {
+                if (!credentials?.email || !credentials?.password)
+                    throw new Error("Email and password are required!");
+
+                const user = await prisma.user.findUnique({
+                    where: { email: credentials.email },
                 });
-                if (error) {
-                    console.error("Resend error: ", error.message);
-                    throw new Error(error.message);
-                }
+                if (!user || !user.hashedPassword)
+                    throw new Error("No account found with this email!");
+
+                const isValid = await bcrypt.compare(credentials.password, user.hashedPassword);
+
+                if (!isValid) throw new Error("Incorrect Password!");
+
+                return user;
             },
         }),
     ],
     callbacks: {
-        async session({ session, user }) {
-            if (session.user) {
-                session.user.id = user.id;
+        async session({ session, token }) {
+            if (token.sub) {
+                session.user.id = token.sub;
             }
             return session;
-        },
-        async redirect({ url, baseUrl }) {
-            // Handle relative callback URLs
-            if (url.startsWith("/")) return `${baseUrl}${url}`;
-            // Allow same origin URLs
-            else if (new URL(url).origin === baseUrl) return url;
-            return baseUrl;
         },
     },
     secret: process.env.NEXTAUTH_SECRET,
     session: {
-        strategy: "database",
-        maxAge: 30 * 24 * 60 * 60, // 30 days
-        updateAge: 24 * 60 * 60, // 24 hours
+        strategy: "jwt",
     },
 };
 

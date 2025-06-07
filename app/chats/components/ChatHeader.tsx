@@ -1,4 +1,4 @@
-import UserImage from "@/app/components/UserImage";
+import { useUiStore } from "@/lib/store/useUiStore";
 import { formatDistanceToNow, isToday } from "date-fns";
 import { ArrowLeft, Info, Phone, User, Video } from "lucide-react";
 import Image from "next/image";
@@ -28,7 +28,7 @@ function ChatHeader({
 }) {
     const router = useRouter();
 
-    console.log("Img:", participantUserImage);
+    const { setHideHeader } = useUiStore();
 
     return (
         <div className="rounded-t-lg bg-gray-200 dark:bg-zinc-900 p-2 flex items-center justify-between shadow-md">
@@ -40,7 +40,12 @@ function ChatHeader({
                 )}
                 <div
                     className="relative flex items-center gap-2 py-1 px-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-700 cursor-pointer"
-                    onClick={() => router.push(`/profile/${participantUserId}`)}
+                    onClick={() => {
+                        if (isMobile) {
+                            setHideHeader(false);
+                        }
+                        router.push(`/profile/${participantUserId}`);
+                    }}
                 >
                     <div className="relative h-fit flex items-center justify-center rounded-full bg-gray-300 dark:bg-gray-600">
                         <div className="w-10 h-10 mx-auto flex items-center justify-center">
@@ -64,13 +69,15 @@ function ChatHeader({
                         )}
                     </div>
                     <div className="flex flex-col">
-                        <h1 className="font-semibold">{participantName ?? "Unknown User"}</h1>
+                        <h1 className="font-semibold line-clamp-1">
+                            {participantName ?? "Unknown User"}
+                        </h1>
                         <span className="text-xs text-gray-500 dark:text-gray-400">
                             {isOnline
                                 ? "Active Now"
                                 : lastSeen
-                                ? `Active ${formatDistanceToNow(lastSeen, { addSuffix: true })}`
-                                : ""}
+                                  ? `Active ${formatDistanceToNow(lastSeen, { addSuffix: true })}`
+                                  : ""}
                         </span>
                     </div>
                 </div>

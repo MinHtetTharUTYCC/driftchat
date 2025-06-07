@@ -65,7 +65,7 @@ const StarterChatWindow = forwardRef<StarterChatWindowHandle, StarterChatWindowP
         }, [allUsers, query]);
 
         return (
-            <div className="relative h-full flex flex-col m-3">
+            <div className="h-full flex flex-col m-3">
                 <div className="rounded-lg overflow-hidden border-b border-gray-300 dark:border-gray-600 flex items-center gap-2 p-2">
                     {isMobile && (
                         <div
@@ -89,7 +89,7 @@ const StarterChatWindow = forwardRef<StarterChatWindowHandle, StarterChatWindowP
                     />
                 </div>
                 {isOpen && (
-                    <div className="absolute inset-0 mt-16 md:mt-12 ml-4 p-2 space-y-1 w-[300px] max-h-[300px] bg-white dark:bg-zinc-800 overflow-y-auto rounded-lg shadow-md">
+                    <div className="absolute mt-16 md:mt-12 ml-4 p-2 space-y-1 w-[300px] max-h-[300px] bg-white dark:bg-zinc-800 overflow-y-auto rounded-lg shadow-md">
                         {!query.trim() && <p className="font-semibold my-2">All Users</p>}
                         {filteredUsers.length > 0 ? (
                             filteredUsers.map((user) => (

@@ -14,14 +14,15 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  image         String?
-  shortIntro    String    @default("")
-  accounts      Account[]
-  sessions      Session[]
+  id             String    @id @default(cuid())
+  name           String?
+  email          String    @unique
+  emailVerified  DateTime?
+  hashedPassword String?
+  image          String?
+  shortIntro     String    @default("")
+  accounts       Account[]
+  sessions       Session[]
 
   messages Message[] //messages sent by this user
   chats    ChatParticipant[]
@@ -58,15 +59,6 @@ model Session {
   expires      DateTime
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-//when user requests link, this is created and deleted after click
-model VerificationToken {
-  identifier String //user's email
-  token      String   @unique //random token emailed
-  expires    DateTime
-
-  @@unique([identifier, token])
 }
 
 // Chat Models
